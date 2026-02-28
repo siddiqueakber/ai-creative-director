@@ -8,7 +8,7 @@
 
 ## Features
 
-- **Thought in, film out**: One input (text or voice) → deep understanding, perspective selection, and a full short film
+- **Thought in, film out**: One input text → deep understanding, perspective selection, and a full short film
 - **Documentary-style narration**: Natural, flowing script (Planet Earth / contemplative film feel) with optional voice (ElevenLabs)
 - **Multi-model pipeline**: Understanding (Claude), shot planning, narration, music (Udio), and video (Runway / Google Veo)
 - **History & auth**: Save thoughts and videos; sign in with Google (NextAuth)
