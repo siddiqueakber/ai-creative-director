@@ -1,0 +1,396 @@
+/* Orbit - Calming Design System */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Crimson+Pro:ital,wght@0,400;0,500;1,400&display=swap');
+
+@import "tailwindcss";
+
+:root {
+  /* Calming Color Palette */
+  --sage-50: #f6f8f6;
+  --sage-100: #e3e9e3;
+  --sage-200: #c8d4c8;
+  --sage-300: #a3b5a3;
+  --sage-400: #7a967a;
+  --sage-500: #5c7a5c;
+  --sage-600: #4a634a;
+  --sage-700: #3d503d;
+  --sage-800: #344034;
+  --sage-900: #2d362d;
+
+  /* Warm Neutrals */
+  --sand-50: #fdfcfa;
+  --sand-100: #f8f6f1;
+  --sand-200: #f0ebe3;
+  --sand-300: #e4ddd1;
+  --sand-400: #d4c9b8;
+  --sand-500: #bfb19c;
+  --sand-600: #a89a82;
+  --sand-700: #8a7d6a;
+  --sand-800: #706658;
+  --sand-900: #5c544a;
+
+  /* Accent Colors */
+  --rose-mist: #e8d5d5;
+  --lavender-soft: #dcd5e8;
+  --sky-gentle: #d5e3e8;
+  --honey-warm: #e8ddd5;
+
+  /* Semantic */
+  --background: var(--sand-50);
+  --foreground: var(--sage-900);
+  --muted: var(--sand-300);
+  --accent: var(--sage-500);
+  --accent-soft: var(--sage-100);
+
+  /* Text Colors - Light Mode */
+  --text-primary: var(--sage-900);
+  --text-secondary: var(--sage-700);
+  --text-muted: var(--sage-600);
+  --text-label: var(--sage-600);
+
+  /* Typography */
+  --font-sans: 'Outfit', system-ui, sans-serif;
+  --font-serif: 'Crimson Pro', Georgia, serif;
+
+  /* Enhanced Shadow System */
+  --shadow-sm: 0 1px 2px rgba(45, 54, 45, 0.05), 0 1px 3px rgba(45, 54, 45, 0.03);
+  --shadow-md: 0 4px 6px rgba(45, 54, 45, 0.07), 0 2px 4px rgba(45, 54, 45, 0.05);
+  --shadow-lg: 0 10px 15px rgba(45, 54, 45, 0.1), 0 4px 6px rgba(45, 54, 45, 0.05);
+  --shadow-xl: 0 20px 25px rgba(45, 54, 45, 0.12), 0 8px 10px rgba(45, 54, 45, 0.05);
+  --shadow-2xl: 0 25px 50px rgba(45, 54, 45, 0.15), 0 12px 24px rgba(45, 54, 45, 0.08);
+  --shadow-inner: inset 0 2px 4px rgba(45, 54, 45, 0.06);
+
+  /* Premium Gradients */
+  --gradient-sage: linear-gradient(135deg, var(--sage-500) 0%, var(--sage-700) 100%);
+  --gradient-sage-soft: linear-gradient(135deg, var(--sage-400) 0%, var(--sage-600) 100%);
+  --gradient-accent: linear-gradient(135deg, var(--lavender-soft) 0%, var(--sky-gentle) 100%);
+  --gradient-shimmer: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+
+  /* Animation Curves */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Spacing Scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --radius: 0.625rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* High contrast: sand-100 */
+    --background: #1a1d1a;
+    --foreground: #f8f6f1;
+    --muted: var(--sage-800);
+    --accent: var(--sage-400);
+    --accent-soft: var(--sage-900);
+
+    /* Text Colors - Dark Mode (High Contrast) */
+    --text-primary: #f8f6f1;
+    /* sand-100 - WCAG AA compliant */
+    --text-secondary: #e3e9e3;
+    /* sage-100 - for secondary text */
+    --text-muted: #c8d4c8;
+    /* sage-200 - for muted text */
+    --text-label: #a3b5a3;
+    /* sage-300 - for labels */
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Gradient Background */
+.gradient-bg {
+  background:
+    radial-gradient(ellipse at 20% 0%, var(--lavender-soft) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, var(--sky-gentle) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, var(--honey-warm) 0%, transparent 70%),
+    var(--background);
+}
+
+/* Calming Animations */
+@keyframes breathe {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: scale(1.02);
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-soft {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(92, 122, 92, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 0 20px rgba(92, 122, 92, 0);
+  }
+}
+
+.animate-breathe {
+  animation: breathe 4s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--sand-100);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--sage-300);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--sage-400);
+}
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-track {
+    background: rgba(40, 45, 40, 0.5);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--sage-600);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--sage-500);
+  }
+}
+
+/* Focus States */
+:focus-visible {
+  outline: 3px solid var(--sage-400);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Glass Effect */
+.glass {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Slightly more “SaaS” elevation for key surfaces */
+.glass.elevated,
+.glass.card {
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: var(--shadow-xl),
+    0 1px 0 rgba(255, 255, 255, 0.4) inset;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  .glass {
+    background: rgba(40, 45, 40, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .glass.elevated,
+  .glass.card {
+    background: rgba(45, 50, 45, 0.95);
+    box-shadow: var(--shadow-2xl),
+      0 1px 0 rgba(255, 255, 255, 0.1) inset;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Text Utility Classes - Auto-adapt to dark mode */
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-label {
+  color: var(--text-label);
+}
+
+/* Typography */
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  letter-spacing: -0.03em;
+}
+
+/* Premium text depth - light mode only */
+h1,
+h2 {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+@media (prefers-color-scheme: dark) {
+  h1,
+  h2 {
+    text-shadow: none;
+  }
+}
+
+p {
+  line-height: 1.7;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Emotion Colors */
+.emotion-shame {
+  --emotion-color: #d4a5a5;
+}
+
+.emotion-fear {
+  --emotion-color: #a5b8d4;
+}
+
+.emotion-anxiety {
+  --emotion-color: #b8a5d4;
+}
+
+.emotion-sadness {
+  --emotion-color: #a5c4d4;
+}
+
+.emotion-anger {
+  --emotion-color: #d4b5a5;
+}
+
+.emotion-guilt {
+  --emotion-color: #c4a5d4;
+}
+
+.emotion-loneliness {
+  --emotion-color: #a5d4c4;
+}
+
+.emotion-frustration {
+  --emotion-color: #d4c4a5;
+}
+
+.emotion-hopelessness {
+  --emotion-color: #b8b8b8;
+}
+
+.emotion-overwhelm {
+  --emotion-color: #d4a5c4;
+}
+
+/* Decorative Pattern Animation */
+@keyframes float-pattern {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  33% {
+    transform: translate(10px, -10px) rotate(3deg);
+  }
+  66% {
+    transform: translate(-10px, 10px) rotate(-3deg);
+  }
+}
+
+.decorative-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: 
+    radial-gradient(circle at 20% 30%, var(--sage-500) 1px, transparent 1px),
+    radial-gradient(circle at 80% 70%, var(--sage-500) 1px, transparent 1px),
+    radial-gradient(circle at 40% 60%, var(--sage-400) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: float-pattern 20s ease-in-out infinite;
+  pointer-events: none;
+}

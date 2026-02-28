@@ -1,0 +1,203 @@
+// MindShift AI - Database Schema
+// Cognitive reframing with video visualization
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  name          String?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  thoughts      Thought[]
+  createdAt     DateTime  @default(now())
+  dailyUseCount Int       @default(0)
+  lastUseDate   DateTime?
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Thought {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  originalText    String   @db.Text
+  inputType       String   // "text"
+  emotion         String   // Primary emotion detected
+  distortionType  String   // Cognitive distortion type
+  intensity       Int      // Emotional intensity 1-10
+  themes          String[] // Key themes extracted
+  reframedText    String   @db.Text
+  video           Video?
+  isFavorite      Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId, createdAt])
+}
+
+model Video {
+  id             String   @id @default(cuid())
+  thoughtId      String   @unique
+  thought        Thought  @relation(fields: [thoughtId], references: [id], onDelete: Cascade)
+
+  // Pipeline state machine
+  pipelineStatus String   @default("pending") // pending | understanding | blueprint | generating | assembling | ready | failed
+
+  // Layer outputs
+  understanding  Json?
+  perspective    Json?
+  blueprint      Json?
+
+  // Documentary structure (NEW)
+  documentaryStructure Json?
+  intensityLevel       Int?
+  narrationStyle       String? // 'sparse' | 'moderate' | 'minimal'
+
+  // Existential Scale Engine
+  scaleNeedClassification Json?
+  zoomPath                 Json?
+
+  // Quality control report
+  qcReport Json?
+
+  // Final outputs
+  finalVideoUrl  String?
+  thumbnailUrl   String?
+  totalDuration  Int?
+
+  // Error tracking
+  errorMessage   String?
+  errorLayer     Int?
+
+  // Relations
+  scenes            VideoScene[]
+  narrationSegments NarrationSegment[]
+  masterTimeline    MasterTimeline?
+  pipelineSteps     PipelineStep[]
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([pipelineStatus])
+}
+
+model MasterTimeline {
+  id               String   @id @default(cuid())
+  videoId          String   @unique
+  video            Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  totalDurationSec Int
+  beats            Json     // array of TimelineBeat
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model VideoScene {
+  id             String   @id @default(cuid())
+  videoId        String
+  video          Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  sceneIndex     Int
+
+  // Runway tracking
+  runwayJobId    String?
+  runwayPrompt   String?  @db.Text
+  runwayVideoUrl String?
+  status         String   @default("pending")
+
+  // Scene metadata
+  description    String?
+  symbolism      String?
+  duration       Int      @default(15)
+  timeOfDay      String?
+  setting        String?
+
+  // Documentary act structure (NEW)
+  actType        String?  // 'the_vast' | 'descent' | 'shared_life' | 'no_judgment' | 'return'
+  actIndex       Int?
+  clipIndex      Int?     // Multiple clips per act
+  microAction    String?  // Required micro-action
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([videoId, sceneIndex])
+  @@unique([videoId, actIndex, clipIndex])
+  @@index([status])
+}
+
+model NarrationSegment {
+  id          String   @id @default(cuid())
+  videoId     String
+  video       Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  segmentType String   // validation | shared_perspective | agency
+  text        String   @db.Text
+  audioUrl    String?
+  duration    Float?
+  startTime   Float?
+  status      String   @default("pending")
+
+  // Documentary timing precision (NEW)
+  actIndex    Int?
+  pauseAfter  Float?   // Silence duration in seconds
+  wordCount   Int?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([videoId, segmentType])
+}
+
+model PipelineStep {
+  id         String   @id @default(cuid())
+  videoId    String
+  video      Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  layer      String
+  step       String   // "start", "end", "error"
+  durationMs Int?
+  payload    Json?
+  createdAt  DateTime @default(now())
+
+  @@index([videoId, createdAt])
+}
